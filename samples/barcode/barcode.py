@@ -41,6 +41,7 @@ ROOT_DIR = os.path.abspath("../../")
 sys.path.append(ROOT_DIR)  # To find local version of the library
 from mrcnn.config import Config
 from mrcnn import model as modellib, utils
+from PIL import Image
 
 # Path to trained weights file
 COCO_WEIGHTS_PATH = os.path.join(ROOT_DIR, "mask_rcnn_coco.h5")
@@ -97,8 +98,8 @@ class BarcodeDataset(utils.Dataset):
             for i in range(80000):
                 filename = "X/train_{}.png".format(i)
                 image_path = os.path.join(dataset_dir, filename)
-                image = skimage.io.imread(image_path)
-                height, width = image.shape[:2]
+                im = Image.open(image_path)
+                height, width = image.size
 
                 self.add_image(
                     "barcode",
@@ -111,8 +112,8 @@ class BarcodeDataset(utils.Dataset):
             for i in range(80000, 90000):
                 filename = "X/train_{}.png".format(i)
                 image_path = os.path.join(dataset_dir, filename)
-                image = skimage.io.imread(image_path)
-                height, width = image.shape[:2]
+                im = Image.open(image_path)
+                height, width = image.size
 
                 self.add_image(
                     "barcode",
