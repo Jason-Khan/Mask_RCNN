@@ -89,6 +89,7 @@ class BarcodeDataset(utils.Dataset):
         """
         # Add classes. We have only one class to add.
         self.add_class("barcode", 1, "barcode")
+        self.dataset_dir = dataset_dir
 
         # Train or validation dataset?
         assert subset in ["train", "val"]
@@ -134,7 +135,7 @@ class BarcodeDataset(utils.Dataset):
             return super(self.__class__, self).load_mask(image_id)
 
         filename = "Y/train_mask_{}.png".format(image_id)
-        image_path = os.path.join(dataset_dir, filename)
+        image_path = os.path.join(self.dataset_dir, filename)
         mask = skimage.io.imread(image_path)
 
         # Return mask, and array of class IDs of each instance. Since we have
