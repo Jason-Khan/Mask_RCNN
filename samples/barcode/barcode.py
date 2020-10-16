@@ -137,7 +137,7 @@ class BarcodeDataset(utils.Dataset):
         filename = "Y/train_mask_{}.png".format(image_id)
         image_path = os.path.join(self.dataset_dir, filename)
         mask = cv2.imread(image_path)
-        mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
+        mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY).reshape(mask.shape[0], mask.shape[1], 1)
 
         # Return mask, and array of class IDs of each instance. Since we have
         # one class ID only, we return an array of 1s
