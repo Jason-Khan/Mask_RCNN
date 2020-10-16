@@ -99,7 +99,7 @@ class BarcodeDataset(utils.Dataset):
                 filename = "X/train_{}.png".format(i)
                 image_path = os.path.join(dataset_dir, filename)
                 im = Image.open(image_path)
-                height, width = image.size
+                height, width = im.size
 
                 self.add_image(
                     "barcode",
@@ -113,7 +113,7 @@ class BarcodeDataset(utils.Dataset):
                 filename = "X/train_{}.png".format(i)
                 image_path = os.path.join(dataset_dir, filename)
                 im = Image.open(image_path)
-                height, width = image.size
+                height, width = im.size
 
                 self.add_image(
                     "barcode",
