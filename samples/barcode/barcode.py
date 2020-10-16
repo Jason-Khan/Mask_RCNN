@@ -153,8 +153,8 @@ class BarcodeDataset(utils.Dataset):
 
 
 def train(model):
-    import warnings
-    warnings.filterwarnings("ignore")
+    # import warnings
+    # warnings.filterwarnings("ignore")
     """Train the model."""
     # Training dataset.
     dataset_train = BarcodeDataset()
