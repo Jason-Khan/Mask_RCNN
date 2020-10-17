@@ -153,8 +153,8 @@ class BarcodeDataset(utils.Dataset):
 
 
 def train(model):
-    # import warnings
-    # warnings.filterwarnings("ignore")
+    import warnings
+    warnings.filterwarnings("once")
     """Train the model."""
     # Training dataset.
     dataset_train = BarcodeDataset()
@@ -173,7 +173,7 @@ def train(model):
     print("Training network heads")
     model.train(dataset_train, dataset_val,
                 learning_rate=config.LEARNING_RATE,
-                epochs=70,
+                epochs=100,
                 layers='heads')
 
 
