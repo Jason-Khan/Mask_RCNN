@@ -34,8 +34,6 @@ import datetime
 import numpy as np
 import skimage.draw
 
-os.environ["CUDA_VISIBLE_DEVICES"]="2"
-
 # Root directory of the project
 ROOT_DIR = os.path.abspath("../../")
 
