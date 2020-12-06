@@ -98,7 +98,7 @@ class BarcodeDataset(utils.Dataset):
 
         if subset == "train":
             # Add images
-            for i in range(800):
+            for i in range(1):
                 filename = "roi_train_im/roi{}.jpg".format(i)
                 image_path = os.path.join(dataset_dir, filename)
                 im = Image.open(image_path)
