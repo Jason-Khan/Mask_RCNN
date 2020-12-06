@@ -99,7 +99,7 @@ class BarcodeDataset(utils.Dataset):
         if subset == "train":
             # Add images
             for i in range(80000):
-                filename = "X/train_{}.png".format(i)
+                filename = "roi_train_im/roi{}.png".format(i)
                 image_path = os.path.join(dataset_dir, filename)
                 im = Image.open(image_path)
                 height, width = im.size
@@ -113,7 +113,7 @@ class BarcodeDataset(utils.Dataset):
         if subset == "val":
             # Add images
             for i in range(80000, 90000):
-                filename = "X/train_{}.png".format(i)
+                filename = "roi_val_im/roi{}.png".format(i)
                 image_path = os.path.join(dataset_dir, filename)
                 im = Image.open(image_path)
                 height, width = im.size
@@ -135,8 +135,10 @@ class BarcodeDataset(utils.Dataset):
         image_info = self.image_info[image_id]
         if image_info["source"] != "barcode":
             return super(self.__class__, self).load_mask(image_id)
-
-        filename = "Y/train_mask_{}.png".format(image_id)
+        if image_id < 80000:
+            filename = "roi_train_masks/roi_mask{}.png".format(image_id)
+        else:
+            filename = "roi_val_masks/roi_mask{}.png".format(image_id)
         image_path = os.path.join(self.dataset_dir, filename)
         mask = cv2.imread(image_path)
         mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY).reshape(mask.shape[0], mask.shape[1], 1)
@@ -176,7 +178,8 @@ def train(model):
     model.train(dataset_train, dataset_val,
                 learning_rate=config.LEARNING_RATE,
                 epochs=100,
-                layers='heads')
+                #layers='heads')
+                layers='all')
 
 
 def color_splash(image, mask):
