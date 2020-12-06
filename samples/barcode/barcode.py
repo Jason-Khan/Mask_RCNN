@@ -178,8 +178,7 @@ def train(model):
     model.train(dataset_train, dataset_val,
                 learning_rate=config.LEARNING_RATE,
                 epochs=100,
-                #layers='heads')
-                layers='all')
+                layers='heads')
 
 
 def color_splash(image, mask):
@@ -344,6 +343,7 @@ if __name__ == '__main__':
 
     # Train or evaluate
     if args.command == "train":
+        print("Training started")
         train(model)
     elif args.command == "splash":
         detect_and_color_splash(model, image_path=args.image,
