@@ -112,7 +112,7 @@ class BarcodeDataset(utils.Dataset):
 
         if subset == "val":
             # Add images
-            for i in range(80000, 90000):
+            for i in range(80000, 80001):
                 filename = "roi_val_im/roi{}.jpg".format(i)
                 image_path = os.path.join(dataset_dir, filename)
                 im = Image.open(image_path)
