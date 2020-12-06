@@ -37,18 +37,18 @@ Open the `inspect_balloon_data.ipynb` or `inspect_balloon_model.ipynb` Jupter no
 
 Train a new model starting from pre-trained COCO weights
 ```
-python3 balloon.py train --dataset=/path/to/balloon/dataset --weights=coco
+python3 barcode.py train --dataset=/home/ec2-user/SageMaker/benchmarks/rpn_output --weights=coco
 ```
 
 Resume training a model that you had trained earlier
 ```
-python3 balloon.py train --dataset=/path/to/balloon/dataset --weights=last
+python3 barcode.py train --dataset=/home/ec2-user/SageMaker/benchmarks/rpn_output --weights=last
 ```
 
 Train a new model starting from ImageNet weights
 ```
-python3 balloon.py train --dataset=/path/to/balloon/dataset --weights=imagenet
+python3 barcode.py train --dataset=/home/ec2-user/SageMaker/benchmarks/rpn_output --weights=imagenet
 ```
 
-The code in `balloon.py` is set to train for 3K steps (30 epochs of 100 steps each), and using a batch size of 2. 
+The code in `barcode.py` is set to train for 100000 steps (100 epochs of 1000 steps each), and using a batch size of 2. 
 Update the schedule to fit your needs.
