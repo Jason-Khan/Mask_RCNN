@@ -259,6 +259,7 @@ def detect_and_color_splash(model, image_path=None, video_path=None):
 
 if __name__ == '__main__':
     import argparse
+    import warnings
     warnings.filterwarnings("ignore")
 
     # Parse command line arguments
