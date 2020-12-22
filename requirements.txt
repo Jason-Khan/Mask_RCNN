@@ -4,7 +4,7 @@ Pillow
 cython
 matplotlib
 scikit-image
-tensorboard==1.14.0
+tensorboard>=1.14.0
 tensorflow-gpu==1.15
 keras==2.1.0
 opencv-python
