@@ -115,8 +115,8 @@ class BarcodeDataset(utils.Dataset):
         class_ids: a 1D array of class IDs of the instance masks.
         """
         # If not a balloon dataset image, delegate to parent class.
-        image_info = self.image_info[image_id]
-        if image_info["source"] != "barcode":
+        info = self.image_info[image_id]
+        if info["source"] != "barcode":
             return super(self.__class__, self).load_mask(image_id)
         # if image_id < 80000:
         #     filename = "roi_train_masks/roi_mask{}.jpg".format(image_id)
