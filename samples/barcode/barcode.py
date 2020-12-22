@@ -45,6 +45,8 @@ from mrcnn.config import Config
 from mrcnn import model as modellib, utils
 from PIL import Image
 import cv2
+import glob
+
 # Path to trained weights file
 COCO_WEIGHTS_PATH = os.path.join(ROOT_DIR, "mask_rcnn_coco.h5")
 
@@ -84,7 +86,7 @@ class BarcodeConfig(Config):
 
 class BarcodeDataset(utils.Dataset):
 
-    def load_barcode(self, dataset_dir, subset):
+    def load_barcode(self, dataset_dir):
         """Load a subset of the Barcode dataset.
         dataset_dir: Root directory of the dataset.
         subset: Subset to load: train or val
@@ -93,36 +95,17 @@ class BarcodeDataset(utils.Dataset):
         self.add_class("barcode", 1, "barcode")
         self.dataset_dir = dataset_dir
 
-        # Train or validation dataset?
-        assert subset in ["train", "val"]
+        for i in range(80000):
+            filename = "roi_train_im/roi{}.jpg".format(i)
+            image_path = os.path.join(dataset_dir, filename)
+            im = Image.open(image_path)
+            height, width = im.size
 
-        if subset == "train":
-            # Add images
-            for i in range(80000):
-                filename = "roi_train_im/roi{}.jpg".format(i)
-                image_path = os.path.join(dataset_dir, filename)
-                im = Image.open(image_path)
-                height, width = im.size
-
-                self.add_image(
-                    "barcode",
-                    image_id=i,  # use file name as a unique image id
-                    path=image_path,
-                    width=width, height=height)
-
-        if subset == "val":
-            # Add images
-            for i in range(80000, 80001):
-                filename = "roi_val_im/roi{}.jpg".format(i)
-                image_path = os.path.join(dataset_dir, filename)
-                im = Image.open(image_path)
-                height, width = im.size
-
-                self.add_image(
-                    "barcode",
-                    image_id=i,  # use file name as a unique image id
-                    path=image_path,
-                    width=width, height=height)
+            self.add_image(
+                "barcode",
+                image_id=i,  # use file name as a unique image id
+                path=image_path,
+                width=width, height=height)
 
     def load_mask(self, image_id):
         """Generate instance masks for an image.
@@ -135,22 +118,27 @@ class BarcodeDataset(utils.Dataset):
         image_info = self.image_info[image_id]
         if image_info["source"] != "barcode":
             return super(self.__class__, self).load_mask(image_id)
-        if image_id < 80000:
-            filename = "roi_train_masks/roi_mask{}.jpg".format(image_id)
-        else:
-            filename = "roi_val_masks/roi_mask{}.jpg".format(image_id)
-        image_path = os.path.join(self.dataset_dir, filename)
-        mask = cv2.imread(image_path)
-        mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY).reshape(mask.shape[0], mask.shape[1], 1)
+        # if image_id < 80000:
+        #     filename = "roi_train_masks/roi_mask{}.jpg".format(image_id)
+        # else:
+        #     filename = "roi_val_masks/roi_mask{}.jpg".format(image_id)
+        file_pattern = "roi_train_masks/roi_mask{}_*.jpg".format(image_id)
+        all_masks_names = glob.glob(os.path.join(self.dataset_dir, file_pattern))
+
+        masks = np.zeros([info['height'], info['width'], len(all_masks_names)], dtype=np.uint8)
+        for i, filename in enumerate(all_masks_names):    
+            mask = cv2.imread(image_path)
+            mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
+            masks[:, :, i] = mask
 
         # Return mask, and array of class IDs of each instance. Since we have
         # one class ID only, we return an array of 1s
-        return mask.astype(np.bool), np.ones([1], dtype=np.int32)
+        return mask.astype(np.bool), np.ones([len(all_masks_names)], dtype=np.int32)
 
     def image_reference(self, image_id):
         """Return the path of the image."""
         info = self.image_info[image_id]
-        if info["source"] == "balloon":
+        if info["source"] == "barcode":
             return info["path"]
         else:
             super(self.__class__, self).image_reference(image_id)
@@ -162,20 +150,20 @@ def train(model):
     """Train the model."""
     # Training dataset.
     dataset_train = BarcodeDataset()
-    dataset_train.load_barcode(args.dataset, "train")
+    dataset_train.load_barcode(args.dataset)
     dataset_train.prepare()
 
     # Validation dataset
-    dataset_val = BarcodeDataset()
-    dataset_val.load_barcode(args.dataset, "val")
-    dataset_val.prepare()
+    # dataset_val = BarcodeDataset()
+    # dataset_val.load_barcode(args.dataset, "val")
+    # dataset_val.prepare()
 
     # *** This training schedule is an example. Update to your needs ***
     # Since we're using a very small dataset, and starting from
     # COCO trained weights, we don't need to train too long. Also,
     # no need to train all layers, just the heads should do it.
-    print("Training network heads")
-    model.train(dataset_train, dataset_val,
+    # print("Training network heads")
+    model.train(dataset_train,
                 learning_rate=config.LEARNING_RATE,
                 epochs=100,
                 layers='all')
