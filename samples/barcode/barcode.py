@@ -133,7 +133,7 @@ class BarcodeDataset(utils.Dataset):
 
         # Return mask, and array of class IDs of each instance. Since we have
         # one class ID only, we return an array of 1s
-        return mask.astype(np.bool), np.ones([len(all_masks_names)], dtype=np.int32)
+        return masks.astype(np.bool), np.ones([len(all_masks_names)], dtype=np.int32)
 
     def image_reference(self, image_id):
         """Return the path of the image."""
