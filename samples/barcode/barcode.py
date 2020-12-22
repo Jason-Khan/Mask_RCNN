@@ -127,7 +127,7 @@ class BarcodeDataset(utils.Dataset):
 
         masks = np.zeros([info['height'], info['width'], len(all_masks_names)], dtype=np.uint8)
         for i, filename in enumerate(all_masks_names):    
-            mask = cv2.imread(image_path)
+            mask = cv2.imread(filename)
             mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
             masks[:, :, i] = mask
 
