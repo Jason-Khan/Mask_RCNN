@@ -79,9 +79,9 @@ class BarcodeConfig(Config):
     # Skip detections with < 90% confidence
     DETECTION_MIN_CONFIDENCE = 0.9
 
-    IMAGE_RESIZE_MODE = "none"
-    IMAGE_MIN_DIM = 400
-    IMAGE_MAX_DIM = 400
+    IMAGE_RESIZE_MODE = "square"
+    IMAGE_MIN_DIM = 448
+    IMAGE_MAX_DIM = 448
 
 
 ############################################################
