@@ -104,6 +104,8 @@ class BarcodeDataset(utils.Dataset):
         self.dataset_dir = dataset_dir
 
         for i in range(80000):
+            if i == 64343: 
+                continue
             filename = "roi_train_im/roi{}.png".format(i)
             image_path = os.path.join(dataset_dir, filename)
             im = Image.open(image_path)
