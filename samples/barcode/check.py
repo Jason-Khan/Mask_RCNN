@@ -16,4 +16,5 @@ for i in tqdm(range(80000)):
         mask = Image.open(filename)
         h, w = mask.size
         if h != height or w != width:
+            os.remove(filename)
             print(filename)
