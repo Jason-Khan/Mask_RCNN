@@ -1,9 +1,10 @@
 from PIL import Image
 import glob
 import os
+from tqdm import tqdm
 
 dataset_dir="/home/ec2-user/SageMaker/benchmarks/high_resolution"
-for i in range(80000):
+for i in tqdm(range(80000)):
     filename = "roi_train_im/roi{}.png".format(i)
     image_path = os.path.join(dataset_dir, filename)
     im = Image.open(image_path)
