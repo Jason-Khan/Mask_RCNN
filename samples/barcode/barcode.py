@@ -135,15 +135,22 @@ class BarcodeDataset(utils.Dataset):
         file_pattern = "roi_train_masks/roi_mask{}_*.jpg".format(image_id)
         all_masks_names = glob.glob(os.path.join(self.dataset_dir, file_pattern))
 
-        masks = np.zeros([info['height'], info['width'], len(all_masks_names)], dtype=np.uint8)
-        for i, filename in enumerate(all_masks_names):    
+        all_masks = []
+        for filename in all_masks_names:    
             mask = cv2.imread(filename)
             mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
+            if mask.shape[0] != info['height'] or mask.shape[1] != info['width']:
+                continue
+            all_masks.append(mask)
+        
+        masks = np.zeros([info['height'], info['width'], len(all_masks)], dtype=np.uint8)
+        
+        for i, mask in enumerate(all_masks):
             masks[:, :, i] = mask
 
         # Return mask, and array of class IDs of each instance. Since we have
         # one class ID only, we return an array of 1s
-        return masks.astype(np.bool), np.ones([len(all_masks_names)], dtype=np.int32)
+        return masks.astype(np.bool), np.ones([len(all_masks)], dtype=np.int32)
 
     def image_reference(self, image_id):
         """Return the path of the image."""
